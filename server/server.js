@@ -23,7 +23,6 @@ mongoose
 
 // CORS setup for multiple origins (localhost + vercel)
 const allowedOrigins = [
-  "http://localhost:5173",
   process.env.CLIENT_BASE_URL, // e.g., https://dev-connect-mauve-phi.vercel.app
 ];
 
