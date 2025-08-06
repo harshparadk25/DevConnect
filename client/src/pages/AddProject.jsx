@@ -22,7 +22,7 @@ const AddProject = () => {
   const onSubmit = async (data) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/projects",
+        "https://devconnectback.onrender.com/api/projects",
         data,
         {
           headers: {

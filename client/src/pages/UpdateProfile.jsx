@@ -55,7 +55,7 @@ const UpdateProfile = () => {
 }
     try {
       const res = await axios.put(
-  `http://localhost:5000/api/users/${userId}`,
+  `https://devconnectback.onrender.com/api/users/${userId}`,
   updatedData,
   {
     headers: {

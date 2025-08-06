@@ -23,7 +23,7 @@ const AllProjects = () => {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/projects", {
+      const res = await axios.get("https://devconnectback.onrender.com/api/projects", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProjects(res.data);
@@ -34,7 +34,7 @@ const AllProjects = () => {
   };
   const searchUsers = async (query) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/users/search?query=${query}`, {
+      const res = await axios.get(`https://devconnectback.onrender.com/api/users/search?query=${query}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data);
@@ -59,7 +59,7 @@ const AllProjects = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/projects/${projectId}/comment`,
+        `https://devconnectback.onrender.com/api/projects/${projectId}/comment`,
         { text },
         { headers: { Authorization: `Bearer ${token}` } }
       );

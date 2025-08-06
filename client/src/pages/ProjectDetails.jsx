@@ -16,7 +16,7 @@ const ProjectDetails = () => {
 
   const fetchProject = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/projects`);
+      const res = await axios.get(`https://devconnectback.onrender.com/api/projects`);
       const fullProject = res.data.find((proj) => proj._id === id);
       setProject(fullProject);
     } catch (err) {
@@ -31,7 +31,7 @@ const ProjectDetails = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/projects/${id}/comment`,
+        `https://devconnectback.onrender.com/api/projects/${id}/comment`,
         { text: commentText },
         {
           headers: { Authorization: `Bearer ${token}` },

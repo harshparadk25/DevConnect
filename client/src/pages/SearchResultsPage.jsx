@@ -12,7 +12,7 @@ const SearchResultsPage = () => {
     const fetchResults = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:5000/api/projects/search?query=${query}`);
+        const res = await axios.get(`https://devconnectback.onrender.com/api/projects/search?query=${query}`);
         setResults(res.data);
       } catch (err) {
         console.error("Error fetching search results:", err);
