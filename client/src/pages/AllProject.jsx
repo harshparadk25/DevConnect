@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import API from "../lib/axios"; // ✅ use central API instance
 
 const AllProjects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { token, user } = useAuth();
+  const { token } = useAuth();
   const [commentText, setCommentText] = useState({});
   const [commentSubmitting, setCommentSubmitting] = useState({});
 
@@ -23,20 +23,18 @@ const AllProjects = () => {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get("https://devconnectback.onrender.com/api/projects", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await API.get("/projects"); // ✅ GET instead of POST
       setProjects(res.data);
-      setLoading(false);
     } catch (err) {
       console.error("Failed to fetch projects", err);
+    } finally {
+      setLoading(false);
     }
   };
+
   const searchUsers = async (query) => {
     try {
-      const res = await axios.get(`https://devconnectback.onrender.com/api/users/search?query=${query}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await API.get(`/users/search?query=${query}`); // ✅ use API
       setUsers(res.data);
     } catch (err) {
       console.error("Failed to search users", err);
@@ -58,11 +56,7 @@ const AllProjects = () => {
     setCommentSubmitting((prev) => ({ ...prev, [projectId]: true }));
 
     try {
-      const res = await axios.post(
-        `https://devconnectback.onrender.com/api/projects/${projectId}/comment`,
-        { text },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await API.post(`/projects/${projectId}/comment`, { text }); // ✅ use API
 
       setProjects((prev) =>
         prev.map((proj) =>
@@ -97,11 +91,9 @@ const AllProjects = () => {
         {projects.map((project) => (
           <Card key={project._id} className="p-4">
             <CardContent className="flex flex-col md:flex-row gap-6">
-              {/* Left: Project Info */}
               <div className="md:w-1/2">
                 <h2 className="text-xl font-semibold">{project.title}</h2>
                 <p className="text-sm text-gray-600 my-2">{project.description}</p>
-
                 {project.link ? (
                   <a
                     href={ensureHttp(project.link)}
@@ -114,13 +106,11 @@ const AllProjects = () => {
                 ) : (
                   <p className="text-sm text-gray-400 italic">No link provided</p>
                 )}
-
                 <p className="mt-2 text-xs text-gray-500">
                   Uploaded by: {project.user?.name || "Unknown"}
                 </p>
               </div>
 
-              {/* Right: Comments Section */}
               <div className="md:w-1/2">
                 <h3 className="text-md font-semibold mb-2">Comments</h3>
 
@@ -143,7 +133,6 @@ const AllProjects = () => {
                   )}
                 </div>
 
-                {/* Add Comment */}
                 {token && (
                   <div className="flex gap-2 items-center">
                     <Input

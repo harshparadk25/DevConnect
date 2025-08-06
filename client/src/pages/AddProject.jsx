@@ -4,7 +4,8 @@ import { Textarea } from "../components/ui/textarea";
 import { Button } from "../components/ui/button";
 import { Label } from "../components/ui/label";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
+import API from "../lib/axios";
+
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -21,8 +22,7 @@ const AddProject = () => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post(
-        "https://devconnectback.onrender.com/api/projects",
+      const res = await API.post("/projects",
         data,
         {
           headers: {

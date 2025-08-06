@@ -1,11 +1,10 @@
-// src/pages/ProjectDetails.jsx
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import API from "../lib/axios"; // ✅ use centralized instance
 
 const ProjectDetails = () => {
   const { id } = useParams();
@@ -16,7 +15,7 @@ const ProjectDetails = () => {
 
   const fetchProject = async () => {
     try {
-      const res = await axios.get(`https://devconnectback.onrender.com/api/projects`);
+      const res = await API.get("/projects"); // ✅ centralized call
       const fullProject = res.data.find((proj) => proj._id === id);
       setProject(fullProject);
     } catch (err) {
@@ -30,13 +29,7 @@ const ProjectDetails = () => {
     if (!commentText.trim()) return;
 
     try {
-      const res = await axios.post(
-        `https://devconnectback.onrender.com/api/projects/${id}/comment`,
-        { text: commentText },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await API.post(`/projects/${id}/comment`, { text: commentText }); // ✅ use API
 
       setProject((prev) => ({
         ...prev,

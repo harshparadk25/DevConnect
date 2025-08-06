@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import toast from "react-hot-toast";
+import API from "../lib/axios"; // ✅ Use centralized API instance
 
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -10,9 +10,8 @@ import { Label } from "../components/ui/label";
 import { useEffect } from "react";
 
 const UpdateProfile = () => {
-  const { user, token,loading,setUser} = useAuth();
+  const { user, token, loading, setUser } = useAuth();
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     if (!loading && !user) {
@@ -20,50 +19,38 @@ const UpdateProfile = () => {
       navigate("/login");
     }
   }, [loading, user]);
- 
+
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },reset,
+    formState: { isSubmitting },
+    reset,
   } = useForm({
     defaultValues: {
       bio: user?.bio || "",
-     
       avatar: user?.avatar || "",
     },
   });
 
   useEffect(() => {
-  if (user) {
-    reset({
-      bio: user.bio || "",
-      
-      avatar: user.avatar || "",
-    });
-  }
-}, [user, reset]);
-
-  console.log("User:", user);
-
+    if (user) {
+      reset({
+        bio: user.bio || "",
+        avatar: user.avatar || "",
+      });
+    }
+  }, [user, reset]);
 
   const onSubmit = async (updatedData) => {
     const userId = user?.id || user?._id;
 
     if (!userId) {
-  toast.error("User ID not found.");
-  return;
-}
-    try {
-      const res = await axios.put(
-  `https://devconnectback.onrender.com/api/users/${userId}`,
-  updatedData,
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-);
+      toast.error("User ID not found.");
+      return;
+    }
 
+    try {
+      const res = await API.put(`/users/${userId}`, updatedData);
       setUser(res.data);
       toast.success("Profile updated successfully!");
       navigate("/profile");
@@ -82,8 +69,6 @@ const UpdateProfile = () => {
           <Label htmlFor="bio">Bio</Label>
           <Input id="bio" {...register("bio")} />
         </div>
-
-        
 
         <div>
           <Label htmlFor="avatar">Avatar URL</Label>

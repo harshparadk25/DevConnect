@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../lib/axios"; // ✅ use centralized axios instance
 
 const SearchResultsPage = () => {
   const location = useLocation();
@@ -12,7 +12,7 @@ const SearchResultsPage = () => {
     const fetchResults = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`https://devconnectback.onrender.com/api/projects/search?query=${query}`);
+        const res = await API.get(`/projects/search?query=${query}`); // ✅ no hardcoded baseURL
         setResults(res.data);
       } catch (err) {
         console.error("Error fetching search results:", err);
@@ -34,7 +34,7 @@ const SearchResultsPage = () => {
         <p>No results found.</p>
       ) : (
         <div className="grid gap-4">
-          {results.map((item) => (
+          {results.map((item) =>
             item.title ? (
               <Link to={`/projects/${item._id}`} key={item._id}>
                 <div className="border p-4 rounded shadow bg-white hover:bg-gray-100 cursor-pointer">
@@ -51,7 +51,7 @@ const SearchResultsPage = () => {
                 <p className="text-gray-500">User Profile</p>
               </div>
             )
-          ))}
+          )}
         </div>
       )}
     </div>
