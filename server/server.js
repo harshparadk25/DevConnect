@@ -26,6 +26,10 @@ app.use('/api/auth',authRoutes);
 app.use('/api/users',userRoutes);
 app.use("/api/projects",projectRoutes);
 
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend is working!" });
+});
+
 app.listen(PORT,()=>{
     console.log(`server is working on ${PORT}`);
 })
